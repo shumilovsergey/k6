@@ -1,0 +1,61 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: loadtest-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: loadtest
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  pgbouncer:
+    image: pgbouncer/pgbouncer:latest
+    container_name: loadtest-pgbouncer
+    environment:
+      DATABASES_HOST: postgres
+      DATABASES_PORT: 5432
+      DATABASES_USER: postgres
+      DATABASES_PASSWORD: postgres
+      DATABASES_DBNAME: loadtest
+      PGBOUNCER_POOL_MODE: transaction
+      PGBOUNCER_MAX_CLIENT_CONN: 100
+      PGBOUNCER_DEFAULT_POOL_SIZE: 25
+    ports:
+      - "6432:6432"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  back-go:
+    build:
+      context: ./back-go
+      dockerfile: Dockerfile
+    container_name: loadtest-back-go
+    environment:
+      DATABASE_URL: "postgres://postgres:postgres@pgbouncer:6432/loadtest?sslmode=disable"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - pgbouncer
+
+  frontend:
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    container_name: loadtest-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - back-go
+
+volumes:
+  postgres_data:
