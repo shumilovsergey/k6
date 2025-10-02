@@ -4,7 +4,7 @@
 import http from 'k6/http';
 import { check } from 'k6';
 
-const BASE = __ENV.BASE_URL || 'https://test.sh-development.ru';
+const BASE = __ENV.BASE_URL;
 
 // Minute-by-minute steps (tweak as you like)
 const stages = [

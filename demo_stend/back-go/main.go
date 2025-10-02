@@ -70,7 +70,7 @@ func main() {
 		AllowedOrigins:   []string{"*"},
 		AllowedMethods:   []string{"GET", "POST", "OPTIONS"},
 		AllowedHeaders:   []string{"Content-Type"},
-		AllowCredentials: true,
+		AllowCredentials: false,
 	}).Handler(mux)
 
 	log.Println("Starting Go backend on :8080")

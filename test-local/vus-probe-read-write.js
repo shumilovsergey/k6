@@ -4,12 +4,12 @@
 import http from 'k6/http';
 import { check, sleep } from 'k6';
 
-// --- Hardcoded-but-overridable defaults ---
-const BASE       = __ENV.BASE_URL   || 'https://test.sh-development.ru';
+// --- Configuration via environment variables ---
+const BASE       = __ENV.BASE_URL;
 const READ_PATH  = __ENV.READ_PATH  || '/read';
 const WRITE_PATH = __ENV.WRITE_PATH || '/write';
-const READ_RATIO = Number(__ENV.READ_RATIO || 0.8); // 80/20 by default
-const THINK      = Number(__ENV.THINK || 0.2);      // "think time" per action (sec)
+const READ_RATIO = Number(__ENV.READ_RATIO || 0.8);
+const THINK      = Number(__ENV.THINK || 0.2);
 
 // VU ramp plan: start, step, steps, and per-step duration (usually 1m)
 const START_VUS = Number(__ENV.START_VUS || 50);

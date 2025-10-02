@@ -3,8 +3,8 @@
 import http from 'k6/http';
 import { check, sleep } from 'k6';
 
-const BASE = __ENV.BASE_URL || 'https://test.sh-development.ru';
-const THINK = Number(__ENV.THINK || 1); // user "think time" between actions (sec)
+const BASE = __ENV.BASE_URL;
+const THINK = Number(__ENV.THINK || 1);
 
 export const options = {
   stages: [

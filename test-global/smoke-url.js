@@ -2,7 +2,7 @@
 import http from 'k6/http';
 import { check, sleep } from 'k6';
 
-const BASE = __ENV.BASE_URL || 'https://test.sh-development.ru';
+const BASE = __ENV.BASE_URL;
 
 export const options = {
   vus: 5,
