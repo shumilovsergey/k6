@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  k6:
+    image: grafana/k6:latest
+    volumes:
+      - ./:/k6
+    working_dir: /k6
+    entrypoint: ["/bin/sh"]
+    stdin_open: true
+    tty: true
