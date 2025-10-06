@@ -68,8 +68,8 @@ func main() {
 
 	handler := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
-		AllowedMethods:   []string{"GET", "POST", "OPTIONS"},
-		AllowedHeaders:   []string{"Content-Type"},
+		AllowedMethods:   []string{"*"},
+		AllowedHeaders:   []string{"*"},
 		AllowCredentials: false,
 	}).Handler(mux)
 
