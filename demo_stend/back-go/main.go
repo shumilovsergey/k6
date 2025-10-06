@@ -9,7 +9,6 @@ import (
 	"time"
 
 	_ "github.com/lib/pq"
-	"github.com/rs/cors"
 )
 
 var db *sql.DB
@@ -62,19 +61,19 @@ func main() {
 	log.Println("Connected to database")
 
 	mux := http.NewServeMux()
+
+	// Serve static files
+	fs := http.FileServer(http.Dir("./static"))
+	mux.Handle("/", fs)
+
+	// API endpoints
 	mux.HandleFunc("/read", handleRead)
 	mux.HandleFunc("/write", handleWrite)
 	mux.HandleFunc("/health", handleHealth)
 
-	handler := cors.New(cors.Options{
-		AllowedOrigins:   []string{"*"},
-		AllowedMethods:   []string{"*"},
-		AllowedHeaders:   []string{"*"},
-		AllowCredentials: false,
-	}).Handler(mux)
-
 	log.Println("Starting Go backend on :8080")
-	if err := http.ListenAndServe(":8080", handler); err != nil {
+	log.Println("Frontend available at http://localhost:8080/")
+	if err := http.ListenAndServe(":8080", mux); err != nil {
 		log.Fatal(err)
 	}
 }

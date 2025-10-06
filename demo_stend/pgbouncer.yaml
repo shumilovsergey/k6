@@ -47,15 +47,5 @@ services:
     depends_on:
       - pgbouncer
 
-  frontend:
-    build:
-      context: ./front
-      dockerfile: Dockerfile
-    container_name: loadtest-frontend
-    ports:
-      - "3000:80"
-    depends_on:
-      - back-go
-
 volumes:
   postgres_data:

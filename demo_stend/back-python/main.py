@@ -2,8 +2,7 @@ import os
 import json
 import logging
 from datetime import datetime
-from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask import Flask, request, jsonify, send_from_directory
 import psycopg2
 from psycopg2 import pool
 import time
@@ -11,8 +10,7 @@ import time
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*", "methods": "*", "allow_headers": "*"}})
+app = Flask(__name__, static_folder='static', static_url_path='')
 
 # Database connection pool
 db_pool = None
@@ -39,6 +37,10 @@ def init_db_pool():
             else:
                 logger.error(f"Failed to connect to database: {e}")
                 raise
+
+@app.route('/')
+def serve_index():
+    return send_from_directory('static', 'index.html')
 
 @app.route('/read', methods=['GET'])
 def handle_read():
@@ -144,4 +146,6 @@ def handle_health():
 
 if __name__ == '__main__':
     init_db_pool()
+    logger.info("Starting Python backend on :8080")
+    logger.info("Frontend available at http://localhost:8080/")
     app.run(host='0.0.0.0', port=8080)
