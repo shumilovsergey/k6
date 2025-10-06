@@ -81,12 +81,12 @@
     </div>
 
     <script>
-        // CONFIGURATION: Set your backend URL here
-        // Examples:
-        // - Local: 'http://localhost:8080'
-        // - Remote with direct IP: 'http://5.101.51.141:8080'
-        // - Remote via nginx proxy: '/api' (requires nginx location /api/ config)
-        const BACKEND_URL = 'http://localhost:8080';
+        // CONFIGURATION: Auto-detect backend URL or set manually
+        // Auto-detection uses same host as frontend with port 8080
+        // For custom URL, set BACKEND_URL directly:
+        // const BACKEND_URL = 'http://5.101.51.141:8080';
+
+        const BACKEND_URL = `${window.location.protocol}//${window.location.hostname}:8080`;
 
         const API_BASE = BACKEND_URL;
 
